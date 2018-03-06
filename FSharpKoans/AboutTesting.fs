@@ -35,10 +35,10 @@ module ``01: About Testing`` =
         The following example shows you how NOT to do it:
     *)
 
-    //[<Test>]
-    //let ``My whitespace is messed up!`` () = (1 + 1) |> should equal __
-        //(2 + 4) |> should equal __
-
+    (*[<Test>]
+    let ``My whitespace is messed up!`` () = (1 + 1) |> should equal false
+    (2 + 4) |> should equal 6*)
+    
     (*
         If you uncomment that example, you'll see that it won't compile.  That's
         because it uses MULTIPLE lines, but tries to put the first line of the block on the SAME line,
@@ -48,9 +48,9 @@ module ``01: About Testing`` =
     [<Test>]
     let ``01 How this works`` () = // In F#, any sequence of characters between `` marks can be identifiers.  ``This is a long method name`` is way better than ThisIsALongMethodName !
         let expected_value = 1 + 1
-        let actual_value = __ //start by changing this line
+        let actual_value = 2 //start by changing this line
         actual_value |> should equal expected_value
    
     // Easy, right? Now try one more.
     [<Test>]
-    let ``02 Fill in the values`` () = (1 + 1) |> should equal __
+    let ``02 Fill in the values`` () = (1 + 1) |> should equal 2

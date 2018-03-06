@@ -1,5 +1,12 @@
 ﻿namespace FSharpKoans
 open NUnit.Framework
+ 
+ //////////////////////////////////////////////
+ /////EDITED_BY_BENTROPE//////////////////////
+ ////////////////////////////////////////////
+
+
+
 
 (*
 Consider a simple program:
@@ -21,7 +28,7 @@ to the identifier `answer`, to be used in the expression `answer + 2`?
 Now, let's make this a bit more general:
 
     let first = 4
-    let second = 5
+    let second = 5w
     let answer = first + second
     answer + 2
 
@@ -61,12 +68,12 @@ module ``02: About Binding`` =
     [<Test>]
     let ``01 Basic 'let' binding`` () = 
         let x = 50
-        x |> should equal __
+        x |> should equal 50
 
     [<Test>]
     let ``02 Equivalent basic 'let' binding`` () = // this is exactly equivalent to the previous binding.
         let x = 50 in // note that the syntax is more explicit about what's really going on!
-            x |> should equal __
+            x |> should equal 50
 
     [<Test>]
     let ``03 Nest your 'let' statements as deeply as you'd like`` () =
@@ -77,7 +84,8 @@ module ``02: About Binding`` =
                     d
                 c + 1
             b + 7
-        a |> should equal ___
+        a |> should equal 71
+
 
 (*
     Identifiers are *referentially transparent*: the value bound to an identifier never changes.
@@ -113,9 +121,9 @@ module ``02: About Binding`` =
             3 + a
         let c = a + 4
         let a = a + a
-        a |> should equal __
-        b |> should equal __
-        c |> should equal __
+        a |> should equal 42
+        b |> should equal 11
+        c |> should equal 25
 
     (*
         The next test demonstrates *type inference*.
@@ -139,10 +147,10 @@ module ``02: About Binding`` =
         let a = false
         let b = 't'
         x |> should be ofType<int>
-        y |> should be ofType<FILL_ME_IN>
-        z |> should be ofType<FILL_ME_IN>
-        a |> should be ofType<FILL_ME_IN>
-        b |> should be ofType<FILL_ME_IN>
+        y |> should be ofType<string>
+        z |> should be ofType<float>
+        a |> should be ofType<bool>
+        b |> should be ofType<char>
    
    (*
     What's a pattern?  A pattern is something that expresses the SHAPE of data.  Data may
@@ -155,13 +163,13 @@ module ``02: About Binding`` =
 
     [<Test>]
     let ``06 Constant patterns succeed if both sides match`` () =
-        let 900 = __
-        let "Can't win all the time" = __
+        let 900 = 900
+        let "Can't win all the time" = "Can't win all the time"
         () // eh? what's this funny thing? It's called "unit", and you'll learn more about it in AboutUnit.fs later on.
 
     [<Test>]
     let ``07 Constant patterns fail if the sides don't match exactly`` () =
         (fun () ->
-            let "FILL ME IN" = FILL__ME_IN
+            let "FILL ME IN" = "FILL__ME_IN"
             ()
         ) |> should throw typeof<MatchFailureException>

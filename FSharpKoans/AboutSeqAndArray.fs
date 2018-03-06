@@ -55,7 +55,9 @@ module ``21: Sequences and Arrays`` =
     [<Test>]
     let ``01 Creating a sequence (Method 1).`` () =
         let a = Seq.init 10 id // this creates a finite sequence.
-        let b = __ // <-- should be a sequence going from 1..15 inclusive
+  
+        let b = Seq.init 15 (fun n -> (+) n 1) // <-- should be a sequence going from 1..15 inclusive
+
         Seq.length b |> should equal 15
         Seq.head b |> should equal 1
 
@@ -65,7 +67,7 @@ module ``21: Sequences and Arrays`` =
         // (well, infinite enough...!  It might wrap around when we get to
         // the maximum value of a 32-bit signed integer.)
         let evenNumbers = Seq.initInfinite (fun n -> n*2)
-        let multiplesOfFive = __
+        let multiplesOfFive =Seq.initInfinite (fun n -> n*5)
         Seq.take 10 multiplesOfFive |> Seq.toList |> should equal [0;5;10;15;20;25;30;35;40;45]
         Seq.skip 1 multiplesOfFive |> Seq.head |> should equal 5
         Seq.skip 2139 multiplesOfFive |> Seq.head |> should equal 10695
@@ -76,19 +78,28 @@ module ``21: Sequences and Arrays`` =
         // Examine how it works, because you'll have to make
         // the 'hailstone' function based on Seq.unfold
         let puffery seed =
-            Seq.unfold (fun state ->
-                match String.length state with
-                | 0 -> None
-                | 1 -> Some(state, "")
+            Seq.unfold (fun state ->                                            // Returns a sequence that contins the element by the given computation.
+                match String.length state with                                  // Initial state passed on to element Generator
+                | 0 -> None                                                     //This is done until a 'None' value appears, ie Seq empty
+                | 1 -> Some(state, "")                                          // Each call creates a new state
                 | _ ->
                     let result = state.[..String.length state - 2]
                     Some (state, result)
             ) seed
+       
+        
         // if you understood that, you should be able to do this:
         // https://en.wikipedia.org/wiki/Collatz_conjecture#Statement_of_the_problem
         // ... when the sequence reaches 1, stop.
         let hailstone seed =
-            __
+            let rec planter  (seed :int) (tree : seq<int>) : seq<int> =
+                match seed with
+                | 1 -> (Seq.append tree (Seq.singleton 1))
+                | _ -> match (seed % 2) with
+                       | 0 -> planter  ((/)seed 2) (Seq.append tree (Seq.singleton seed)  )
+                       | _ -> planter ((+)((*) seed 3) 1)  (Seq.append tree (Seq.singleton seed))
+            planter seed Seq.empty 
+       
         hailstone 6 |> Seq.toList |> should equal [6; 3; 10; 5; 16; 8; 4; 2; 1]
         hailstone 19 |> Seq.toList |> should equal [19; 58; 29; 88; 44; 22; 11; 34; 17; 52; 26; 13; 40; 20; 10; 5; 16; 8; 4; 2; 1]
         hailstone 1 |> Seq.toList |> should equal [1]
@@ -111,7 +122,13 @@ module ``21: Sequences and Arrays`` =
                     yield! hailstone result // I'm giving back values taken from a sequence here
             }
         let rec puffery x =
-            __ // you've seen the 'puffery' function in the previous test, yes?
+            seq { 
+                yield x
+                match String.length x with 
+                |1 -> ()
+                |_ -> yield! puffery x.[..(String.length x - 2) ]
+                }
+             // you've seen the 'puffery' function in the previous test, yes?
             // Implement that here, using a sequence expression.
         puffery "Whizz!" |> Seq.toList |> should equal ["Whizz!"; "Whizz"; "Whiz"; "Whi"; "Wh"; "W"]
         puffery "ZchelnIk" |> Seq.toList |> should equal ["ZchelnIk"; "ZchelnI"; "Zcheln"; "Zchel"; "Zche"; "Zch"; "Zc"; "Z"]
@@ -120,7 +137,7 @@ module ``21: Sequences and Arrays`` =
     [<Test>]
     let ``05 Arrays are much like lists`` () =
         // Arrays use [| and |], and Lists use [ and ] .
-        let oneToFifteen = __ // <-- WITHOUT using Array.init
-        let a = Array.init 5 __
+        let oneToFifteen = [|1..15|] // <-- WITHOUT using Array.init
+        let a = Array.init 5 (fun n -> n+1)
         oneToFifteen |> should equal [|1;2;3;4;5;6;7;8;9;10;11;12;13;14;15|]
         a |> should equal [|1;2;3;4;5|]

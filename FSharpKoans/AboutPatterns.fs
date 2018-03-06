@@ -22,9 +22,9 @@ module ``09: Advanced pattern-matching`` =
             | "wut" | "lol" -> "yolo"
             | "sunrise"
             | "sunset" -> "transition"
-            | FILL__ME_IN
-            | FILL__ME_IN
-            | FILL__ME_IN -> "failure"
+            | "Johnny Walker"
+            | "Bell's"
+            | "vodka" -> "failure"
             | _ -> "lolwut"
         f "lol" |> should equal "yolo"
         f "wut" |> should equal "yolo"
@@ -37,7 +37,7 @@ module ``09: Advanced pattern-matching`` =
         let f input =
             match input with
             | 0,0 -> "Both 0"
-            | ___ | ___ -> sprintf "One 0, one %d" __
+            | 0,a | a,0 -> sprintf "One 0, one %d" a
             | _ -> "No 0"
         f (3,0) |> should equal "One 0, one 3"
         f (0, 4) |> should equal "One 0, one 4"
@@ -54,7 +54,7 @@ module ``09: Advanced pattern-matching`` =
 
     [<Test>]
     let ``03 Binding composed and decomposed structures using 'as'`` () =
-      let f ((___, ____) as _____) =
-         sprintf "%d and %d in a tuple look like %A" __ __ __
+      let f ((a, b) as c) =
+         sprintf "%d and %d in a tuple look like %A" a b c
       f (0,43) |> should equal "0 and 43 in a tuple look like (0, 43)"
       f (5, 11) |> should equal "5 and 11 in a tuple look like (5, 11)"

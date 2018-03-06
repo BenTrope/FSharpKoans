@@ -25,7 +25,7 @@ type Book =
 module ``06: On the Record`` =
     [<Test>]
     let ``01 Creating records`` () =
-        let myRecord = __
+        let myRecord = { Title = "Steelheart"; Author = "Brandon Sanderson" ; Year = 2013 }
         myRecord.Title |> should equal "Steelheart"
         myRecord.Author |> should equal "Brandon Sanderson"
         myRecord.Year |> should equal 2013
@@ -39,30 +39,37 @@ module ``06: On the Record`` =
                 Author="Michel Foucault"
                 Year=1975
             }
-        myRecord |> should be ofType<FILL_ME_IN>
-        myOtherRecord |> should be ofType<FILL_ME_IN>
+        myRecord |> should be ofType< Pokemon>
+        myOtherRecord |> should be ofType<Book>
+
+        (*
+        let myGeoCoord = { lat = 1.1; long = 2.2 }   // "construct"
+let { lat=myLat; long=myLong } = myGeoCoord  // "deconstruct"
+*)
+
 
     [<Test>]
     let ``03 Decomposing with a record pattern`` () =
         let book = { Title="Dune"; Author="Frank Herbert"; Year=1965 }
-        let __ = book
-        __ |> should equal "Dune" // DO NOT use a . symbol in your answer
-        __ |> should equal 1965 // DO NOT use a . symbol in your answer
+        let {Title = a ; Year = b}= book
+        a |> should equal "Dune" // DO NOT use a . symbol in your answer
+        b |> should equal 1965 // DO NOT use a . symbol in your answer
+
 
     [<Test>]
     let ``04 Decomposing in a match expression`` () =
-        let result =
+        let x =
             match { Name="Raichu"; Attack=90; Defense=55 } with
             | { Name="Pikachu"; Attack=a } -> a/2
             | { Name="Raichu"; Attack=a } -> a/3
             | { Attack=blah; Defense=lol } -> (blah + lol) / 2
-        result |> should equal __
+        x |> should equal 30
 
     [<Test>]
     let ``05 Accessing record members using dot syntax`` () =
         let book = { Title="Tigana"; Author="Guy Gavriel Kay"; Year=1990 }
-        let k = __
-        let j = __
+        let k = book.Title
+        let j = book.Year
         k |> should equal "Tigana"
         j |> should equal 1990
 
@@ -72,6 +79,6 @@ module ``06: On the Record`` =
         let second = { first with Title="A Clash of Kings"; Year=first.Year+2 } // <-- Pssst - see what I did here?
         let third = { second with Title="A Storm of Swords"; Year=2000 }
         let {Year=y0}, {Year=y1}, {Year=y2} = first, second, third
-        y0 |> should equal __
-        y1 |> should equal __
-        y2 |> should equal __
+        y0 |> should equal 1996
+        y1 |> should equal 1998
+        y2 |> should equal 2000

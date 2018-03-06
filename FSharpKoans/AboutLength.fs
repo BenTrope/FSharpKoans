@@ -13,7 +13,7 @@ let f xs =
       | [] -> out
       | _::rest -> innerF rest (1::out)
    innerF xs []
-
+f [1;2;3;4;5]
 This is one of the idioms that you'll see (and use) again and again.
 
 HINT: If you can't figure out what it does after reading through it and thinking about
@@ -40,8 +40,14 @@ module ``13: Finding the length of a list`` =
 
     [<Test>]
     let ``01 Finding the length of a list, the hard way`` () =
+    // write a function to find the length of a list
         let length (xs : 'a list) : int =
-            __ // write a function to find the length of a list
+            let rec innerF lst count = 
+                match lst with
+                |[] -> count                    //Base Case
+                |a -> innerF a.[1..] (count+1)  //removes first element, recurses, increases count +1
+            innerF xs 0
+
         length [9;8;7] |> should equal 3
         length [] |> should equal 0
         length ["Le Comte de Monte-Cristo"] |> should equal 1
@@ -50,4 +56,4 @@ module ``13: Finding the length of a list`` =
     // Hint: https://msdn.microsoft.com/en-us/library/ee340354.aspx
     [<Test>]
     let ``02 Finding the length of a list, the easy way`` () =
-        __ [9;8;5;8;45] |> should equal 5
+        List.length [9;8;5;8;45] |> should equal 5
